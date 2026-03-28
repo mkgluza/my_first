@@ -183,6 +183,19 @@ print(person.values())
 # Write below:
 
 
+def word_count(sentence):
+    counts = {}
+    for word in sentence.split():
+        if word in counts:
+            counts[word] += 1
+        else:
+            counts[word] = 1
+    return counts
+
+
+print(word_count("the cat sat on the mat"))
+
+
 # ============================================================
 # CHAPTER 3: CLASSES
 # ============================================================
@@ -190,17 +203,18 @@ print(person.values())
 # Example: "Car" is a class. Your specific Audi 2017 is an object.
 #
 # Syntax:
-#   class Car:
-#       def __init__(self, brand, year):   # runs when object is created
-#           self.brand = brand             # store as attribute
-#           self.year = year
-#
-#       def describe(self):                # method (function inside class)
-#           print(f"This is a {self.year} {self.brand}.")
-#
-#   my_car = Car("Audi", 2017)            # create object
-#   my_car.describe()                     # call method
-#
+class Car:
+    def __init__(self, brand, year):  # runs when object is created
+        self.brand = brand  # store as attribute
+        self.year = year
+
+    def describe(self):  # method (function inside class)
+        print(f"This is a {self.year} {self.brand}.")
+
+
+my_car = Car("Audi", 2017)  # create object
+my_car.describe()  # call method
+
 # Key rules:
 #   - __init__ always has "self" as first parameter
 #   - every method has "self" as first parameter
@@ -216,7 +230,7 @@ print("=" * 40)
 
 
 class Car:
-    def __init__(brand, year):  # bug 1 (missing something)
+    def __init__(self, brand, year):  # bug 1 (missing something)
         self.brand = brand
         self.year = year
 
@@ -225,9 +239,7 @@ class Car:
 
 
 my_car = Car("Audi", 2017)
-my_car.describe  # bug 2 (missing something)
-
-
+my_car.describe()  # bug 2 (missing something)
 # --- 3.2 [FIX THIS] ---
 # This class tracks a bank balance.
 # One bug inside the deposit method.
@@ -239,7 +251,7 @@ class BankAccount:
         self.balance = balance
 
     def deposit(self, amount):
-        self.balance = amount  # bug: should ADD to balance, not replace it
+        self.balance = +amount  # bug: should ADD to balance, not replace it
 
     def show_balance(self):
         print(f"{self.owner} has {self.balance} PLN")
@@ -257,7 +269,24 @@ account.show_balance()  # should print: Michal has 150 PLN
 # - method info() that prints: "[name] is a [breed]."
 # Create two Dog objects and call both methods on each.
 
+
 # Write below:
+class Dog:
+    def __init__(self, name, breed):
+        self.name = name
+        self.breed = breed
+
+    def bark(self):
+        self.bark = "Woof! I am "
+        print(f"{self.bark} {self.name}")
+
+    def info(self):
+        print(f"{self.name} {self.breed}")
+
+
+dog_info = Dog("Rambo", "Husky")
+dog_info.bark()
+dog_info.info()
 
 
 # ============================================================
@@ -292,7 +321,7 @@ print("=" * 40)
 def safe_divide(a, b):
     try:
         return a / b
-    except:  # bug: be specific
+    except ZeroDivisionError:  # bug: be specific  # noqa: E722
         return "Cannot divide by zero"
 
 
@@ -308,7 +337,7 @@ def read_file(filename):
     try:
         file = open(filename, "r")
         return file.read()
-    except:  # bug: be specific
+    except FileNotFoundError:  # bug: be specific
         return f"Error: file '{filename}' not found"
 
 
@@ -322,8 +351,17 @@ print(read_file("nonexistent.txt"))
 # - Use try/except ZeroDivisionError
 # Test it with: safe_divide(10, 2) and safe_divide(5, 0)
 
-# Write below:
 
+# Write below:
+def safe_divide(a, b):
+    try:
+        return a / b
+    except ZeroDivisionError:
+        return "Cannot divide by zero"
+
+
+print(safe_divide(10, 2))
+print(safe_divide(5, 0))
 
 # --- 4.4 [YOUR TURN] ---
 # Write a function get_value(dictionary, key) that:
@@ -332,8 +370,17 @@ print(read_file("nonexistent.txt"))
 # - Use try/except KeyError
 # Test it with: {"name": "Michal"}, key="name" and key="age"
 
-# Write below:
 
+# Write below:
+def get_value(dictionary, key):
+    try:
+        return dictionary[key]
+    except KeyError:
+        return "Key not found"
+
+
+print(get_value({"name": "Michał"}, "name"))
+print(get_value({"name": "Michał"}, "age"))
 
 # ============================================================
 # CHAPTER 5: MINI PROJECT — Student Gradebook
@@ -353,7 +400,37 @@ print("=" * 40)
 #
 # Create 2 students, add some grades, print their reports.
 
+
 # Write below:
+class Student:
+    def __init__(self, name):
+        self.name = name
+        self.grades = []
+
+    def add_grade(self, grade):
+        self.grades.append(grade)
+
+    def average(self):
+        if not self.grades:
+            return 0
+        return sum(self.grades) / len(self.grades)
+
+    def report(self):
+        avg = self.average()
+        print(f"Student: {self.name} | Grades: {self.grades} | Average: {avg}")
+
+
+michal = Student("Michał")
+mateusz = Student("Mateusz")
+
+michal.add_grade(5)
+michal.add_grade(4)
+
+mateusz.add_grade(3)
+mateusz.add_grade(6)
+
+michal.report()
+mateusz.report()
 
 
 # ============================================================
